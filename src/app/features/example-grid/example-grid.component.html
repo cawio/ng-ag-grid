@@ -1,6 +1,9 @@
 <ag-grid-angular
     class="ag-theme-quartz"
     style="height: 500px;"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs">
+    [rowData]="rowData()"
+    [columnDefs]="columnDefs"
+    [defaultColDef]="defaultColDef"
+    [pagination]="true"
+    (gridReady)="onGridReady($event)">
 </ag-grid-angular>

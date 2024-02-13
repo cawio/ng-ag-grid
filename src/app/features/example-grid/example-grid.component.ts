@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Signal, effect } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef } from 'ag-grid-community';
+import { ColDef, GridReadyEvent } from 'ag-grid-community';
+import { DataService, Launch } from '../../services/data.service';
 
 @Component({
   selector: 'app-example-grid',
@@ -10,17 +11,32 @@ import { ColDef } from 'ag-grid-community';
   styleUrl: './example-grid.component.scss',
 })
 export class ExampleGridComponent {
-  rowData = [
-    { make: 'Toyota', model: 'Celica', price: 35000, electric: false },
-    { make: 'Ford', model: 'Mondeo', price: 32000, electric: false },
-    { make: 'Porsche', model: 'Boxster', price: 72000, electric: false },
-    { make: 'Tesla', model: 'Model S', price: 110000, electric: true },
+  rowData: Signal<Launch[] | undefined>;
+  defaultColDef: ColDef = {
+    resizable: true,
+    sortable: true,
+    filter: true,
+  };
+  columnDefs: ColDef[] = [
+    { field: 'mission' },
+    { field: 'company' },
+    { field: 'location' },
+    { field: 'date' },
+    {
+      field: 'price',
+      valueFormatter: (params) => {
+        return `${params.value} €`;
+      },
+    },
+    { field: 'successful' },
+    { field: 'rocket' },
   ];
 
-  columnDefs: ColDef[] = [
-    { field: 'make', sortable: true, filter: true },
-    { field: 'model', sortable: true, filter: true },
-    { field: 'price', sortable: true, filter: true },
-    { field: 'electric', sortable: true, filter: true },
-  ];
+  constructor(private dataService: DataService) {
+    this.rowData = this.dataService.launches;
+  }
+
+  onGridReady(params: GridReadyEvent) {
+    params.api.sizeColumnsToFit();
+  }
 }
