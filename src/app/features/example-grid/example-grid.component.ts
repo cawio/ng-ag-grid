@@ -2,6 +2,7 @@ import { Component, Signal, effect } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef, GridReadyEvent } from 'ag-grid-community';
 import { DataService, Launch } from '../../services/data.service';
+import { CompanyLogoRendererComponent } from '../../company-logo-renderer/company-logo-renderer.component';
 
 @Component({
   selector: 'app-example-grid',
@@ -19,7 +20,7 @@ export class ExampleGridComponent {
   };
   columnDefs: ColDef[] = [
     { field: 'mission' },
-    { field: 'company' },
+    { field: 'company', cellRenderer: CompanyLogoRendererComponent },
     { field: 'location' },
     { field: 'date' },
     {
